@@ -1,6 +1,6 @@
 ---
 name: adr
-description: Create or update an Architecture Decision Record. Use when a significant architectural or process decision is being made, when an earlier decision needs to be reversed or refined, or when the user asks to "write an ADR", "record this decision", "log this decision", «заведи ADR», «запиши решение». Finds the ADR directory on its own, follows the project's conventions from CLAUDE.md, and sets Supersedes/Amended by links in the affected records.
+description: Create or update an Architecture Decision Record. Use when a significant architectural or process decision is being made, when an earlier decision needs to be reversed or refined, or when the user asks to "write an ADR", "record this decision", "log this decision", «заведи ADR», «запиши решение». Finds the ADR directory on its own, follows the project's conventions from CLAUDE.md / AGENTS.md / GEMINI.md, and sets Supersedes/Amended by links in the affected records.
 ---
 
 # ADR — create or update
@@ -17,7 +17,8 @@ ls adr/ 2>/dev/null || ls docs/adr/ 2>/dev/null || ls doc/adr/ 2>/dev/null
 
 No directory — ask where to create it; don't invent a location.
 
-Check `CLAUDE.md` for a section about ADRs. **Project conventions beat this
+Check the project's agent instructions file — `CLAUDE.md`, `AGENTS.md` or
+`GEMINI.md`, whichever exists — for a section about ADRs. **Project conventions beat this
 skill's defaults**: if the project has set its own title format, language or
 numbering scheme — follow the project.
 
