@@ -20,7 +20,9 @@ No directory — ask where to create it; don't invent a location.
 Check the project's agent instructions file — `CLAUDE.md`, `AGENTS.md` or
 `GEMINI.md`, whichever exists — for a section about ADRs. **Project conventions beat this
 skill's defaults**: if the project has set its own title format, language or
-numbering scheme — follow the project.
+numbering scheme — follow the project. `Firmness`, `Revisit if` and `Record` are
+additive: keep them even when the project's template doesn't list them, unless
+it explicitly says not to.
 
 ## Step 2. Check prior decisions, but don't read everything
 
@@ -47,6 +49,8 @@ ls adr/ | sed -E 's/^([0-9]+).*/\1/' | sort -n | tail -1
 # [Title: the decision itself, not the topic]
 
 Date: YYYY-MM-DD
+Firmness: tentative         ← tentative | settled
+Revisit if: [condition]     ← mandatory for tentative
 Supersedes: NNNN            ← only if it reverses one
 Status: Amended by NNNN     ← added later, when this record gets refined
 
@@ -66,10 +70,41 @@ is compound.
 Pros, cons, technical consequences. Cons are mandatory — an ADR without cons
 is not a decision, it's an advertisement. A separate "Follow-up:" line — the
 questions this decision opens that will have to be closed separately.
+
+## Record
+
+> "verbatim quote from the conversation" — user
+> "a doubt nobody answered" — user (unresolved)
 ```
 
 The title is a statement: not "The live table transport question", but
 "The live table is delivered over SSE".
+
+### Firmness
+
+The prose of an ADR always reads more confident than the conversation was. Firmness is
+how a future reader tells a commitment from an experiment.
+
+- `settled` — the user committed, and no raised doubt was left open.
+- `tentative` — "let's go with X for now", "let's try", an open objection, a choice
+  made under time pressure. **When unsure, it's tentative.**
+
+`Revisit if:` is a concrete, checkable trigger ("a second API client appears",
+"p95 latency over 200 ms"), not "if needed". A tentative decision without one
+is just a shrug.
+
+### Record
+
+The Context is your retelling; the Record is the evidence. Two to five
+**verbatim** quotes from the conversation, mostly the user's words.
+
+- Every doubt or objection that was raised and not refuted goes in, marked
+  `(unresolved)`. Quoting only the line that sealed the decision defeats the purpose.
+- Verbatim, in the original language. If you can't quote it, don't paraphrase
+  it into quotation marks — put it in Context instead.
+- No secrets, tokens, or third parties' personal details.
+- Written after the fact with no conversation to quote — say so:
+  `Record: none, reconstructed from code`. That, too, tells the reader something.
 
 ## Step 5. Repair the history
 
@@ -86,6 +121,18 @@ evidence that back then people thought otherwise. That's the whole value.
 One line: number, title, what was touched. Don't retell the content — it's
 in the file.
 
+## Precedent, not scripture
+
+When an existing ADR comes up — the user questions it, or it blocks what's being
+asked — don't defend it on reflex. Read its `Firmness`, `Revisit if` and `Record` first.
+
+- `tentative`, or its `Revisit if` has fired — the question is open. Say so.
+- The facts in its Context no longer hold — point that out; the decision stood on them.
+- No `Firmness` line — the record predates the field. Its confidence is unknown,
+  not settled.
+- `settled` and still true — cite it, and say what new fact would justify
+  reopening it. That's stare decisis; refusing to discuss it is dogma.
+
 ## Pitfalls
 
 - **A recap instead of a decision.** "We discussed options, leaning towards…" is not an ADR.
@@ -94,6 +141,10 @@ in the file.
   as arbitrary, and the argument starts all over — exactly what this skill exists to prevent.
 - **Retroactive edits.** Changed your mind — a new ADR with a link, not an edit
   of the old text. The only thing appended to an old file is the Status line.
+- **Smoothing over doubt.** "Let's try SSE for now" written up as "SSE was chosen
+  because…" with `Firmness: settled`. Next session treats a guess as law.
+- **A cherry-picked Record.** Only the quotes that support the decision. The
+  objections are the part a future reader needs most.
 - **Reading every ADR.** Expensive and almost always unnecessary. Titles, then two
   or three relevant files.
 - **ADRs about taste.** A button colour is not a decision. A decision is something

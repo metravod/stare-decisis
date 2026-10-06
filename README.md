@@ -23,8 +23,9 @@ When you say "write an ADR" or "record this decision" — or a significant decis
 3. **Checks precedent cheaply** — reads titles, opens only the two or three relevant records, never the whole archive.
 4. **Numbers it correctly** — next free number, same zero-padding as the neighbours.
 5. **Writes it strictly** — `Context` (with rejected options), `Decision`, `Consequences` (cons are mandatory: an ADR without cons is an advertisement).
-6. **Repairs the history** — marks older records `Superseded by` / `Amended by` without rewriting their text. The old reasoning stays as evidence.
-7. **Reports in one line** — number, title, what was touched.
+6. **Keeps the doubt** — `Firmness: tentative | settled` with a concrete `Revisit if:` trigger, and a `Record` of verbatim quotes from the conversation, objections included. The prose of an ADR always reads more confident than the discussion was; the Record is what lets a later session tell a commitment from an experiment.
+7. **Repairs the history** — marks older records `Superseded by` / `Amended by` without rewriting their text. The old reasoning stays as evidence.
+8. **Reports in one line** — number, title, what was touched.
 
 ## Example
 
@@ -32,6 +33,8 @@ When you say "write an ADR" or "record this decision" — or a significant decis
 # The live table is delivered over SSE
 
 Date: 2026-08-23
+Firmness: tentative
+Revisit if: a mobile client ships, or the proxy can't hold idle connections for 5 min
 Supersedes: 0004
 
 ## Context
@@ -51,6 +54,29 @@ same server cost as SSE with worse ergonomics.
 + Updates arrive within a second; request volume drops ~20×.
 − One long-lived connection per tab; proxy timeouts must be raised.
 Follow-up: decide on reconnect backoff policy.
+
+## Record
+
+> "we never send anything client→server over that channel, why WebSockets" — user
+> "not sure SSE survives mobile networks, but let's go with it for now" — user (unresolved)
+```
+
+## Add to your CLAUDE.md / AGENTS.md
+
+The skill loads when a decision is being *written*. The other half of the problem is *reading*: an agent that finds an old ADR tends to defend it as law, however shaky it was. That rule has to live in the always-loaded project instructions. Paste this block — it replaces any older hand-written ADR workflow in the file:
+
+```markdown
+## Architecture Decision Records
+
+Decisions live in `./adr/`. Before deciding anything architectural, `ls adr/` and
+open only the records whose titles are relevant. To create or change a record,
+use the `adr` skill.
+
+ADRs are precedent, not scripture. Before defending one against me, read its
+`Firmness`, `Revisit if` and `Record`:
+- `tentative`, or `Revisit if` has fired — the question is open; say so.
+- The facts in its Context no longer hold — point that out.
+- No `Firmness` line — confidence unknown, not settled.
 ```
 
 ## Install
