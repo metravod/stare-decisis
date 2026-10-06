@@ -16,10 +16,10 @@ This skill turns your agent into a clerk of precedent. It records decisions in a
 
 ## What it does
 
-When you say "write an ADR", "record this decision", or invoke `/adr`, the agent:
+When you say "write an ADR" or "record this decision" — or a significant decision simply gets made in the conversation — the agent picks the skill up on its own (in Claude Code you can also call it explicitly with `/adr`). Then it:
 
 1. **Finds the ADR directory** (`adr/`, `docs/adr/`, `doc/adr/`) — and asks instead of inventing one.
-2. **Respects project conventions** from `CLAUDE.md` over its own defaults.
+2. **Respects project conventions** from `CLAUDE.md` / `AGENTS.md` / `GEMINI.md` over its own defaults.
 3. **Checks precedent cheaply** — reads titles, opens only the two or three relevant records, never the whole archive.
 4. **Numbers it correctly** — next free number, same zero-padding as the neighbours.
 5. **Writes it strictly** — `Context` (with rejected options), `Decision`, `Consequences` (cons are mandatory: an ADR without cons is an advertisement).
@@ -55,15 +55,21 @@ Follow-up: decide on reconnect backoff policy.
 
 ## Install
 
-**Claude Code** (user-level, all projects):
+The skill is a single `SKILL.md` in the open [Agent Skills](https://agentskills.io/) format — no scripts, no agent-specific tools. Clone it into your agent's skills directory as a folder named `adr`.
+
+| Agent | All projects | One project |
+|-------|--------------|-------------|
+| Claude Code | `~/.claude/skills/adr` | `.claude/skills/adr` |
+| Codex | `~/.codex/skills/adr` | `.agents/skills/adr` |
+| Other Agent Skills–compatible agents | see your agent's docs | — |
 
 ```bash
+# Claude Code
 git clone https://github.com/metravod/stare-decisis ~/.claude/skills/adr
+
+# Codex
+git clone https://github.com/metravod/stare-decisis ~/.codex/skills/adr
 ```
-
-Or project-level: clone into `.claude/skills/adr` inside your repo.
-
-The skill is a single `SKILL.md` and works with any agent that supports the [Agent Skills](https://docs.claude.com/en/docs/agents-and-tools/agent-skills) format.
 
 ## License
 
